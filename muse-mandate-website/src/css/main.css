@@ -6,12 +6,10 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: transparent;
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1535 50%, #2d1b3d 100%);
     color: #ffffff;
     line-height: 1.6;
     overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 h1, h2, h3 {
@@ -22,13 +20,13 @@ h1, h2, h3 {
 .content-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 20px;
+    padding: 40px 20px;
 }
 
 /* Section Titles */
 .section-title {
-    font-size: 1.2rem;
-    margin-bottom: 8px;
+    font-size: 2rem;
+    margin-bottom: 30px;
     text-align: center;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;

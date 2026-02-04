@@ -1,7 +1,7 @@
 /* Hero Section */
 .hero-section {
     position: relative;
-    min-height: 100vh;
+    height: 100vh;
     width: 100%;
     background-image: url('../assets/images/hero-bg.jpg');
     background-size: cover;
@@ -35,21 +35,15 @@
 .hero-content {
     position: relative;
     z-index: 2;
-    text-align: left;
+    text-align: center;
     padding: 20px;
     animation: fadeInUp 1.5s ease-out;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 40px;
-    max-width: 900px;
-    width: 100%;
 }
 
 .hero-title {
-    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-size: clamp(3rem, 8vw, 7rem);
     font-weight: 700;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
     text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8),
                  0 0 60px rgba(102, 126, 234, 0.5);
     letter-spacing: 2px;
@@ -60,7 +54,7 @@
 }
 
 .hero-subtitle {
-    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    font-size: clamp(1rem, 2.5vw, 1.8rem);
     font-weight: 300;
     color: #e0e7ff;
     text-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);

@@ -37,7 +37,6 @@
             <h1>Muse Mandate Admin</h1>
             <div style="display: flex; gap: 10px;">
                 <a href="users.html" class="btn-secondary">Manage Users</a>
-                <a href="contacts.html" class="btn-secondary">Contact Messages</a>
                 <button id="logout-btn" class="btn-secondary">Logout</button>
             </div>
         </header>
@@ -45,27 +44,21 @@
         <div class="admin-content">
             <!-- Upload Section -->
             <section class="upload-section">
-                <h2 id="form-title">Upload New Track</h2>
+                <h2>Upload New Track</h2>
                 <form id="upload-form">
-                    <input type="hidden" id="track-id" name="track-id">
                     <div class="form-group">
                         <label for="track-title">Track Title</label>
                         <input type="text" id="track-title" name="track-title" required>
                     </div>
                     <div class="form-group">
                         <label for="track-file">MP3 File</label>
-                        <input type="file" id="track-file" name="track-file" accept="audio/mpeg">
-                        <small style="color: rgba(255, 255, 255, 0.5);">Leave empty to keep existing file</small>
+                        <input type="file" id="track-file" name="track-file" accept="audio/mpeg" required>
                     </div>
                     <div class="form-group">
                         <label for="artwork-file">Artwork (JPG/PNG)</label>
-                        <input type="file" id="artwork-file" name="artwork-file" accept="image/jpeg,image/png">
-                        <small style="color: rgba(255, 255, 255, 0.5);">Leave empty to keep existing artwork</small>
+                        <input type="file" id="artwork-file" name="artwork-file" accept="image/jpeg,image/png" required>
                     </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button type="submit" class="btn-primary" id="submit-btn">Upload Track</button>
-                        <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display: none;">Cancel</button>
-                    </div>
+                    <button type="submit" class="btn-primary">Upload Track</button>
                 </form>
                 <p id="upload-status" class="status-message"></p>
             </section>

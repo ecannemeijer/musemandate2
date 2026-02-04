@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Messages - Muse Mandate Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-dashboard">
+        <header class="admin-header">
+            <h1>Contact Messages</h1>
+            <div style="display: flex; gap: 10px;">
+                <a href="admin.html" class="btn-secondary">Back to Admin</a>
+                <a href="users.html" class="btn-secondary">Manage Users</a>
+                <button id="logout-btn" class="btn-secondary">Logout</button>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <section class="contact-messages-section">
+                <h2>Messages</h2>
+                <div id="contact-messages-list" class="contact-messages-list">
+                    <!-- Messages will be dynamically loaded here -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const api = new MusicAPI();
+            const contactMessagesList = document.getElementById('contact-messages-list');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            // Check authentication
+            const authData = await api.checkAuth();
+            if (!authData.authenticated) {
+                window.location.href = 'admin.html';
+                return;
+            }
+            
+            // Logout
+            logoutBtn.addEventListener('click', async () => {
+                await api.logout();
+                window.location.href = 'admin.html';
+            });
+            
+            // Load contact messages
+            loadContactMessages();
+            
+            async function loadContactMessages() {
+                const contacts = await api.getContacts();
+                contactMessagesList.innerHTML = '';
+                
+                if (contacts.length === 0) {
+                    contactMessagesList.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.5);">
+                            <p>No contact messages yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                contacts.forEach(contact => {
+                    const contactElement = createContactElement(contact);
+                    contactMessagesList.appendChild(contactElement);
+                });
+            }
+            
+            function createContactElement(contact) {
+                const contactDiv = document.createElement('div');
+                contactDiv.className = 'contact-message-item';
+                
+                const date = new Date(contact.createdAt).toLocaleString();
+                
+                contactDiv.innerHTML = `
+                    <div class="contact-message-header">
+                        <div>
+                            <h4>${contact.name}</h4>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem;">${contact.email}</p>
+                            <p style="color: rgba(255, 255, 255, 0.4); font-size: 0.8rem; margin-top: 5px;">${date}</p>
+                        </div>
+                        <button class="btn-delete" data-contact-id="${contact.id}">Delete</button>
+                    </div>
+                    <div class="contact-message-body">
+                        <p>${contact.message}</p>
+                    </div>
+                `;
+                
+                // Delete button
+                const deleteBtn = contactDiv.querySelector('.btn-delete');
+                deleteBtn.addEventListener('click', async () => {
+                    if (confirm(`Delete message from ${contact.name}?`)) {
+                        await api.deleteContact(contact.id);
+                        await loadContactMessages();
+                    }
+                });
+                
+                return contactDiv;
+            }
+        });
+    </script>
+</body>
+</html>

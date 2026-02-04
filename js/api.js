@@ -1,15 +1,29 @@
 // API Module - PHP Backend Integration
 class MusicAPI {
     constructor() {
-        this.baseURL = '/musemandate/backend';
+        // Derive base path dynamically so the API works when the site is hosted under
+        // different folder names like /musemandate/ or /musemandate2/
+        const firstSegment = window.location.pathname.split('/').filter(Boolean)[0];
+        const projectBase = firstSegment ? `/${firstSegment}` : '';
+        this.baseURL = `${projectBase}/backend`;
     }
 
     // Get all tracks
     async getTracks() {
         try {
             const response = await fetch(`${this.baseURL}/tracks.php`);
-            if (!response.ok) throw new Error('Failed to fetch tracks');
-            return await response.json();
+            if (!response.ok) {
+                const text = await response.text();
+                console.error('getTracks failed: server returned non-OK response:', response.status, text);
+                throw new Error('Failed to fetch tracks');
+            }
+            try {
+                return await response.json();
+            } catch (parseError) {
+                const text = await response.text();
+                console.error('Failed to parse JSON from getTracks, server returned:', text);
+                throw parseError;
+            }
         } catch (error) {
             console.error('Error loading tracks:', error);
             return [];
@@ -136,6 +150,56 @@ class MusicAPI {
         } catch (error) {
             console.error('Auth check error:', error);
             return { authenticated: false };
+        }
+    }
+
+    // Submit contact form
+    async submitContact(name, email, message) {
+        try {
+            const response = await fetch(`${this.baseURL}/contact.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to send message');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Contact error:', error);
+            throw error;
+        }
+    }
+
+    // Get all contacts (admin only)
+    async getContacts() {
+        try {
+            const response = await fetch(`${this.baseURL}/contact.php`);
+            if (!response.ok) throw new Error('Failed to fetch contacts');
+            return await response.json();
+        } catch (error) {
+            console.error('Error loading contacts:', error);
+            return [];
+        }
+    }
+
+    // Delete contact message
+    async deleteContact(contactId) {
+        try {
+            const response = await fetch(`${this.baseURL}/contact.php`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: contactId })
+            });
+
+            if (!response.ok) throw new Error('Failed to delete contact');
+            return await response.json();
+        } catch (error) {
+            console.error('Error deleting contact:', error);
+            return false;
         }
     }
 }
