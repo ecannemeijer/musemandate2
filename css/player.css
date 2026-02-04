@@ -1,18 +1,18 @@
 /* Music Player Container */
 .music-player-container {
     background: transparent;
-    border-radius: 15px;
-    padding: 12px 15px;
+    border-radius: 12px;
+    padding: 8px 10px;
     margin-bottom: 0;
     box-shadow: none;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
-    gap: 15px;
+    gap: 10px;
     align-items: center;
     transition: all 0.3s ease;
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
 }
 
 .music-player-container:hover {
@@ -26,9 +26,9 @@
 }
 
 .player-artwork img {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
     object-fit: cover;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease;
@@ -44,29 +44,29 @@
 }
 
 #player-track-title {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: #ffffff;
 }
 
 /* Player Controls */
 .player-controls {
     display: flex;
-    gap: 15px;
+    gap: 8px;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .control-btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
     color: white;
-    width: 35px;
-    height: 35px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
@@ -85,9 +85,9 @@
 }
 
 .play-btn {
-    width: 42px;
-    height: 42px;
-    font-size: 1.1rem;
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
 }
 
 /* Progress Container */
@@ -97,12 +97,12 @@
 
 .progress-bar {
     width: 100%;
-    height: 6px;
+    height: 4px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     overflow: hidden;
     cursor: pointer;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .progress {
@@ -115,7 +115,7 @@
 .time-display {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.6);
 }
 
@@ -126,16 +126,16 @@
 
 .track-list {
     display: grid;
-    gap: 8px;
+    gap: 5px;
 }
 
 .track-item {
     background: transparent;
-    border-radius: 12px;
-    padding: 10px 12px;
+    border-radius: 8px;
+    padding: 6px 8px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -157,9 +157,9 @@
 }
 
 .track-artwork img {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
     object-fit: cover;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
@@ -169,15 +169,15 @@
 }
 
 .track-title {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 500;
     color: #ffffff;
 }
 
 .track-duration {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.5);
-    margin-top: 5px;
+    margin-top: 2px;
 }
 
 /* Responsive Design */
