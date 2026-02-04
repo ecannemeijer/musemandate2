@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Muse Mandate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-dashboard">
+        <header class="admin-header">
+            <h1>User Management</h1>
+            <div>
+                <a href="admin.html" class="btn-secondary" style="margin-right: 10px;">Back to Admin</a>
+                <button id="logout-btn" class="btn-secondary">Logout</button>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <!-- Create User Section -->
+            <section class="upload-section">
+                <h2 id="form-title">Create New User</h2>
+                <form id="user-form">
+                    <input type="hidden" id="user-id">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password <span id="password-optional" style="color: rgba(255,255,255,0.5); font-size: 0.9rem;"></span></label>
+                        <input type="password" id="password" name="password">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn-primary" style="flex: 1;">Save User</button>
+                        <button type="button" id="cancel-btn" class="btn-secondary" style="flex: 0; display: none;">Cancel</button>
+                    </div>
+                </form>
+                <p id="user-status" class="status-message"></p>
+            </section>
+
+            <!-- Users List Section -->
+            <section class="track-list-section">
+                <h2>Users</h2>
+                <div id="users-list" class="admin-track-list">
+                    <!-- Users will be dynamically loaded here -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/musemandate/backend';
+        let editingUserId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadUsers();
+
+            document.getElementById('user-form').addEventListener('submit', handleUserSubmit);
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            document.getElementById('cancel-btn').addEventListener('click', cancelEdit);
+        });
+
+        async function checkAuth() {
+            try {
+                const response = await fetch(`${API_BASE}/auth.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'check' })
+                });
+                const data = await response.json();
+                if (!data.authenticated) {
+                    window.location.href = 'admin.html';
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'admin.html';
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_BASE}/users.php`);
+                const users = await response.json();
+                
+                const usersList = document.getElementById('users-list');
+                usersList.innerHTML = '';
+
+                if (users.length === 0) {
+                    usersList.innerHTML = '<div style="text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.5);"><p>No users found.</p></div>';
+                    return;
+                }
+
+                users.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'admin-track-item';
+                    userDiv.innerHTML = `
+                        <div class="admin-track-info">
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold;">
+                                ${user.username.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <h4>${user.username}</h4>
+                                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">
+                                    ${user.email || 'No email'} • Created: ${new Date(user.created_at).toLocaleDateString()}
+                                </p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-secondary" onclick="editUser(${user.id}, '${user.username}', '${user.email || ''}')">Edit</button>
+                            <button class="btn-delete" onclick="deleteUser(${user.id}, '${user.username}')">Delete</button>
+                        </div>
+                    `;
+                    usersList.appendChild(userDiv);
+                });
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showStatus('Failed to load users', 'error');
+            }
+        }
+
+        async function handleUserSubmit(e) {
+            e.preventDefault();
+
+            const userId = document.getElementById('user-id').value;
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!editingUserId && !password) {
+                showStatus('Password is required for new users', 'error');
+                return;
+            }
+
+            const userData = { username, email };
+            if (password) userData.password = password;
+
+            try {
+                let response;
+                if (editingUserId) {
+                    userData.id = editingUserId;
+                    response = await fetch(`${API_BASE}/users.php`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(userData)
+                    });
+                } else {
+                    response = await fetch(`${API_BASE}/users.php`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(userData)
+                    });
+                }
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showStatus(editingUserId ? 'User updated successfully!' : 'User created successfully!', 'success');
+                    document.getElementById('user-form').reset();
+                    cancelEdit();
+                    loadUsers();
+                } else {
+                    showStatus(data.error || 'Operation failed', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Operation failed. Please try again.', 'error');
+            }
+        }
+
+        function editUser(id, username, email) {
+            editingUserId = id;
+            document.getElementById('user-id').value = id;
+            document.getElementById('username').value = username;
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = '';
+            document.getElementById('password').required = false;
+            document.getElementById('password-optional').textContent = '(leave blank to keep current)';
+            document.getElementById('form-title').textContent = 'Edit User';
+            document.getElementById('cancel-btn').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            editingUserId = null;
+            document.getElementById('user-form').reset();
+            document.getElementById('password').required = true;
+            document.getElementById('password-optional').textContent = '';
+            document.getElementById('form-title').textContent = 'Create New User';
+            document.getElementById('cancel-btn').style.display = 'none';
+        }
+
+        async function deleteUser(id, username) {
+            if (!confirm(`Delete user "${username}"?`)) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/users.php`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showStatus('User deleted successfully', 'success');
+                    loadUsers();
+                } else {
+                    showStatus(data.error || 'Failed to delete user', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Failed to delete user', 'error');
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch(`${API_BASE}/auth.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'logout' })
+                });
+                window.location.href = 'admin.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('user-status');
+            status.textContent = message;
+            status.className = type === 'error' ? 'error-message' : 'status-message';
+            status.style.display = 'block';
+            setTimeout(() => status.style.display = 'none', 5000);
+        }
+    </script>
+</body>
+</html>

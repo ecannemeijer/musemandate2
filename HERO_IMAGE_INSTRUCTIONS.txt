@@ -1,0 +1,23 @@
+IMPORTANT: SAVE YOUR HERO IMAGE
+=================================
+
+The DJ beach photo you provided needs to be saved manually as:
+
+📁 src/assets/images/hero-bg.jpg
+
+Steps:
+1. Save the image from your attachments
+2. Rename it to: hero-bg.jpg
+3. Place it in: src/assets/images/
+
+The website is looking for this file and will display it as the fullscreen background!
+
+Quick Start:
+1. Save hero-bg.jpg to src/assets/images/
+2. Open src/index.html in your browser
+3. Enjoy your music website!
+
+Admin Login:
+- URL: src/admin.html
+- Username: admin
+- Password: admin

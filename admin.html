@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Muse Mandate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="login-container" class="login-container">
+        <div class="login-box">
+            <h1>Muse Mandate</h1>
+            <h2>Admin Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+                <p id="login-error" class="error-message"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
+        <header class="admin-header">
+            <h1>Muse Mandate Admin</h1>
+            <div style="display: flex; gap: 10px;">
+                <a href="users.html" class="btn-secondary">Manage Users</a>
+                <button id="logout-btn" class="btn-secondary">Logout</button>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <h2 id="form-title">Upload New Track</h2>
+                <form id="upload-form">
+                    <input type="hidden" id="track-id" name="track-id">
+                    <div class="form-group">
+                        <label for="track-title">Track Title</label>
+                        <input type="text" id="track-title" name="track-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="track-file">MP3 File</label>
+                        <input type="file" id="track-file" name="track-file" accept="audio/mpeg">
+                        <small style="color: rgba(255, 255, 255, 0.5);">Leave empty to keep existing file</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="artwork-file">Artwork (JPG/PNG)</label>
+                        <input type="file" id="artwork-file" name="artwork-file" accept="image/jpeg,image/png">
+                        <small style="color: rgba(255, 255, 255, 0.5);">Leave empty to keep existing artwork</small>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn-primary" id="submit-btn">Upload Track</button>
+                        <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display: none;">Cancel</button>
+                    </div>
+                </form>
+                <p id="upload-status" class="status-message"></p>
+            </section>
+
+            <!-- Track List Section -->
+            <section class="track-list-section">
+                <h2>Uploaded Tracks</h2>
+                <div id="admin-track-list" class="admin-track-list">
+                    <!-- Tracks will be dynamically loaded here -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Admin Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            background: #1a1a2e;
+            color: white;
+        }
+        .test-box {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+            background: #16213e;
+            border-radius: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #0f3460;
+            background: #0f3460;
+            color: white;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .success {
+            background: #2ecc71;
+            color: white;
+        }
+        .error {
+            background: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>Admin Login Test</h1>
+        <p>Test credentials: admin / admin</p>
+        
+        <form id="testForm">
+            <label>Username:</label>
+            <input type="text" id="testUsername" value="admin">
+            
+            <label>Password:</label>
+            <input type="password" id="testPassword" value="admin">
+            
+            <button type="submit">Test Login</button>
+        </form>
+        
+        <div id="result"></div>
+        
+        <hr style="margin: 30px 0;">
+        
+        <h3>Debug Info:</h3>
+        <div id="debug" style="font-family: monospace; font-size: 12px;"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('testForm');
+        const result = document.getElementById('result');
+        const debug = document.getElementById('debug');
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('testUsername').value;
+            const password = document.getElementById('testPassword').value;
+            
+            debug.innerHTML = `
+                Username entered: "${username}"<br>
+                Password entered: "${password}"<br>
+                Username length: ${username.length}<br>
+                Password length: ${password.length}<br>
+                Match result: ${username === 'admin' && password === 'admin'}
+            `;
+            
+            if (username === 'admin' && password === 'admin') {
+                result.className = 'result success';
+                result.textContent = '✓ Login successful! Credentials are correct.';
+                sessionStorage.setItem('museMandate_admin', 'true');
+            } else {
+                result.className = 'result error';
+                result.textContent = '✗ Login failed! Check your credentials.';
+            }
+        });
+    </script>
+</body>
+</html>

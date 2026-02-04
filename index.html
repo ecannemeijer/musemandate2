@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muse Mandate - Progressive House</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/player.css">
+</head>
+<body>
+    <!-- Hero Section with Background Image -->
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Muse Mandate</h1>
+            <p class="hero-subtitle">Progressive • Melodic House</p>
+            
+            <!-- Music Player -->
+            <div id="music-player-container" class="music-player-container">
+                <div class="player-artwork">
+                    <img id="player-artwork-img" src="" alt="Track Artwork">
+                </div>
+                <div class="player-info">
+                    <h3 id="player-track-title">No Track Selected</h3>
+                    <div class="player-controls">
+                        <button id="prev-btn" class="control-btn">⏮</button>
+                        <button id="play-pause-btn" class="control-btn play-btn">▶</button>
+                        <button id="next-btn" class="control-btn">⏭</button>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progress" class="progress"></div>
+                        </div>
+                        <div class="time-display">
+                            <span id="current-time">0:00</span>
+                            <span id="duration">0:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Playlist Section -->
+            <div class="playlist-section">
+                <h2 class="section-title">Tracks</h2>
+                <div id="track-list" class="track-list">
+                    <!-- Tracks will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audio-player" preload="metadata"></audio>
+
+    <script src="js/api.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
